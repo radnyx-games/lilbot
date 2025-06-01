@@ -9,7 +9,7 @@ from discord.ext import commands
 from dotenv import load_dotenv
 
 # -- IDK it's for the markov babbler commands -- #
-import Markov_babbler as Babbler
+import markov_babbler as Babbler
 import dropbox
 
 load_dotenv()

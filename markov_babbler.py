@@ -22,8 +22,6 @@ def add_to_stats(stats, text=""):
         return get_stats(text)
     procesed_words = text.split()
 
-    #raise ValueError(f"Debbuging: {stats}")
-
     for i in range(len(procesed_words) - 1):
         if procesed_words[i] in stats.keys():
             stats[procesed_words[i]].append(procesed_words[i+1])
