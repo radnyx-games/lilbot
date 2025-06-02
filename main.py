@@ -23,6 +23,7 @@ DROPBOX_KEY = os.getenv('DROPBOX_KEY')
 if DROPBOX_KEY is None:
     raise ValueError('Environment variable "DROPBOX_KEY" not set.')
 dbx = dropbox.Dropbox(DROPBOX_KEY)
+messages_sent = 0
 
 def get_cloud_stats():
     try:
@@ -57,12 +58,16 @@ async def babble(interaction: discord.Interaction, sentences: int):
 
 @bot.event
 async def on_message(message):
+    global messages_sent
     if message.author.bot:
         return
     if not (message.content and not message.embeds and not message.attachments):
         return
+
+    messages_sent += 1
     stats = get_cloud_stats()
     stats = Babbler.get_stats(stats, message.content)
-    save_cloud_stats(stats)    
+    if messages_sent >= 15:
+        save_cloud_stats(stats)    
 
 bot.run(BOT_TOKEN)
