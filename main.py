@@ -62,7 +62,7 @@ async def on_message(message):
     if not (message.content and not message.embeds and not message.attachments):
         return
     stats = get_cloud_stats()
-    stats = Babbler.add_to_stats(stats, message.content)
+    stats = Babbler.get_stats(stats, message.content)
     save_cloud_stats(stats)    
 
 bot.run(BOT_TOKEN)
