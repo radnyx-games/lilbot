@@ -1,2 +1,8 @@
 discord.py
 python-dotenv
+requests
+torch
+from transformers,
+   AutoModelForCausalLM
+   AutoTokenizer
+   pipeline
