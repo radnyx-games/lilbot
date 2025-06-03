@@ -70,7 +70,7 @@ async def on_message(message):
     messages_sent += 1
     if need_new_stats:
         stats = get_cloud_stats()
-    stats = Babbler.get_stats(stats, message.content)
+    stats = Babbler.get_stats(message.content, stats)
     if messages_sent >= 15:
         save_cloud_stats(stats)
         need_new_stats = True
