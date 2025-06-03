@@ -24,6 +24,7 @@ if DROPBOX_KEY is None:
     raise ValueError('Environment variable "DROPBOX_KEY" not set.')
 dbx = dropbox.Dropbox(DROPBOX_KEY)
 messages_sent = 0
+need_new_stats = True
 
 def get_cloud_stats():
     try:
@@ -31,8 +32,10 @@ def get_cloud_stats():
         data = res.content
         
         stats = json.loads(data.decode('utf-8'))
+        need_new_stats = False
         return stats
     except Exception as e:
+        need_new_stats = False
         return {}
 
 def save_cloud_stats(stats):
@@ -65,9 +68,11 @@ async def on_message(message):
         return
 
     messages_sent += 1
-    stats = get_cloud_stats()
+    if need_new_stats:
+        stats = get_cloud_stats()
     stats = Babbler.get_stats(stats, message.content)
     if messages_sent >= 15:
-        save_cloud_stats(stats)    
+        save_cloud_stats(stats)
+        need_new_stats = True
 
 bot.run(BOT_TOKEN)
