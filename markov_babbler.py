@@ -1,6 +1,12 @@
 ﻿import os
 import random
 import json
+import dropbox
+
+DROPBOX_KEY = os.getenv('DROPBOX_KEY')
+if DROPBOX_KEY is None:
+    raise ValueError('Environment variable "DROPBOX_KEY" not set.')
+dbx = dropbox.Dropbox(DROPBOX_KEY)
 
 def is_end(word):
     return word[-1] in ['.', '!', '?']
@@ -35,3 +41,20 @@ def babble(stats, sentences):
         except (KeyError, IndexError):
             continue
     return result.strip()
+
+def get_cloud_stats():
+    try:
+        metadata, res = dbx.files_download("/lilguys-markov/stats.json")
+        data = res.content
+        
+        stats = json.loads(data.decode('utf-8'))
+        need_new_stats = False
+        return stats
+    except Exception as e:
+        need_new_stats = False
+        return {}
+
+def save_cloud_stats(stats):
+    stats_str = json.dumps(stats)
+    stats_bytes = stats_str.encode('utf-8')
+    dbx.files_upload(stats_bytes, '/lilguys-markov/stats.json', mode=dropbox.files.WriteMode.overwrite)
