@@ -19,8 +19,7 @@ if BOT_TOKEN is None:
 
 # -- Data storage for markov commands -- #
 messages_sent = 0
-need_new_stats = True
-stats = {}
+stats = Babbler.get_stats()
 
 intents = discord.Intents.default()
 intents.message_content = True
@@ -54,8 +53,6 @@ async def on_message(message):
         return
 
     messages_sent += 1
-    if need_new_stats:
-        stats = Babbler.get_cloud_stats()
     stats = Babbler.get_stats(message.content, stats)
     if messages_sent >= 15:
         Babbler.save_cloud_stats(stats)

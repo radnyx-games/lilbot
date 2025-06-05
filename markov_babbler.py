@@ -48,10 +48,8 @@ def get_cloud_stats():
         data = res.content
         
         stats = json.loads(data.decode('utf-8'))
-        need_new_stats = False
         return stats
     except Exception as e:
-        need_new_stats = False
         return {}
 
 def save_cloud_stats(stats):
